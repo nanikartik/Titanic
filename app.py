@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 # Load the trained model and scaler
 model = pickle.load(open("titanic_model.pkl", "rb"))
 scaler = pickle.load(open("scaler.pkl", "rb"))
+expected_columns = pickle.load(open("feature_columns.pkl", "rb"))
 
 # Streamlit UI
 st.title("🚢 Titanic Survival Prediction App")
@@ -53,6 +54,7 @@ def preprocess_input():
 # Predict
 if st.button("Predict Survival"):
     input_df = preprocess_input()
+    input_df = input_df.reindex(columns=expected_columns, fill_value=0)
     prediction = model.predict(input_df)[0]
     prob = model.predict_proba(input_df)[0][1]
 
